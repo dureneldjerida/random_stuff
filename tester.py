@@ -1,25 +1,18 @@
 # importing packages
 from pytube import YouTube
 import os
-  
+
+os.chdir("/Users/aaatipamula/Desktop/unprocessed_music/")
+
+with open("videos.txt", "r") as f:
+    video = f.readline() 
+
 # url input from user
-yt = YouTube(
-    str(input("Enter the URL of the video you want to download: \n>> ")))
+yt = YouTube(str(video))
   
 # extract only audio
-video = yt.streams.filter(only_audio=True).first()
-  
-# check for destination to save file
-print("Enter the destination (leave blank for current directory)")
-destination = str(input(">> ")) or '.'
-  
-# download the file
-out_file = video.download(output_path=destination)
-  
-# save the file
-base, ext = os.path.splitext(out_file)
-new_file = base + '.mp3'
-os.rename(out_file, new_file)
-  
-# result of success
-print(yt.title + " has been successfully downloaded.")
+v = yt.streams.filter(file_extension = 'mp4', res= '1080p').first().download()
+x = v.split("unprocessed_music/")
+
+print(v)
+print(x)
