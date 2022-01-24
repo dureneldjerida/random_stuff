@@ -16,23 +16,23 @@ with open("videos.txt", "r") as f:
 for x in videos:
     x.replace("\n", ".")
 
-    os.chdir(data.get("video_dir"))
-    print(f"Changing directory to {os.getcwd()}...")
-
     yt = YouTube(str(x))
 
+    print("Downloading video...")
     for i in tqdm(range(100)):
-        video = yt.streams.filter(file_extension = 'mp4', res= '1080p').first().download(output_path= data.get("video_dir"))
-    print(f"{yt.title}.mp4 downloaded")
+        video = yt.streams.filter(file_extension = 'mp4').get_highest_resolution().download(output_path= data.get("video_dir"))
+    print(f"{yt.title}.mp4 downloaded.")
 
-    os.chdir(data.get("music_dir"))
-    print(f"Changing directory to {os.getcwd()}...")
+    print("Downloading audio...")
+    for i in tqdm(range(100)):
+        audiofile = yt.streams.filter(only_audio= True, abr= "128kbps").first().download()
+    print(f"{yt.title} audio downloaded.")
 
-    path, file = os.path.split(video)
-    outfile = os.getcwd() + file.replace("mp4", "mp3")
+    outfile = audiofile.replace("mp4", "mp3")
 
-    with VideoFileClip(video) as v:
-        with v.audio as a:
-            a.write_audiofile(outfile)
+    with AudioFileClip(audiofile) as a:
+        a.write_audiofile(outfile)
+
+    os.remove(audiofile)
+
     print(f"{yt.title} is downloaded and converted!\n")
-    sys.exit
