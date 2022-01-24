@@ -1,7 +1,6 @@
 import os
 from pytube import YouTube
 from moviepy.editor import *
-import sys
 from tqdm import tqdm
 import json
 
